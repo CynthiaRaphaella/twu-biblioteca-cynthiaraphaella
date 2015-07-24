@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BibliotecaApp {
 
-    private static List<Book> books = new ArrayList<Book>();
+    private List<Book> books = new ArrayList<Book>();
     private List<String> menu = new ArrayList<String>();
 
     private String LIST_BOOKS = "1. Listar todos os livros";
@@ -34,45 +34,39 @@ public class BibliotecaApp {
         return books;
     }
 
-    /*public void chooseMenuOption(int option){
-        try {
-            if(option > menu.size()) {
-                throw new InvalidMenuException();
-            }
-            else{
-                if(menu.get(option).equals(LIST_BOOKS)){
-                    showAllBooks();
-                }
-            }
-        }
-        catch (InvalidMenuException e){
-            System.out.println(e.getMessage());
-        }
-    }*/
-
     public void chooseMenuOption(int option) throws InvalidMenuException {
-        if(option > menu.size()) {
+        if(option > menu.size() || option < 1) {
             throw new InvalidMenuException();
         }
         else{
             if(menu.get(option).equals(LIST_BOOKS)){
-                showAllBooks();
+                showAllAvaliableBooks();
+            }
+        }
+    }
+
+    public void checkoutBook(int id){
+        for(Book book: books){
+            if(book.id == id){
+                books.remove(book);
+                break;
             }
         }
     }
 
     public List<Book> getPreExistingBooks(){
         List<Book> preExistingBooks = new ArrayList<Book>();
-        preExistingBooks.add(new Book("Book 1", "Author", "1990"));
-        preExistingBooks.add(new Book("Book 2", "Author", "1996"));
+        preExistingBooks.add(new Book(1, "Book 1", "Author", "1990"));
+        preExistingBooks.add(new Book(2, "Book 2", "Author", "1996"));
+        preExistingBooks.add(new Book(3, "Book 3", "Author", "2000"));
         return preExistingBooks;
     }
 
-    public List<Book> getAllBooks(){
+    public List<Book> getAvaliableBooks(){
         return books;
     }
 
-    public void showAllBooks(){
+    public void showAllAvaliableBooks(){
         for(Book book: books){
             System.out.println(book.name);
         }
