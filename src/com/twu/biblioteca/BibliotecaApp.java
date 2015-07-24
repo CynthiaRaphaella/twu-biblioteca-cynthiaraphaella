@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.data.Book;
+import com.twu.biblioteca.expections.BookIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidMenuException;
 
 import java.util.ArrayList;
@@ -45,14 +46,17 @@ public class BibliotecaApp {
         }
     }
 
-    public String checkoutBook(int id){
+    public String checkoutBook(int id) throws BookIsNotAvailableException {
+        if(id < 1){
+            throw new BookIsNotAvailableException();
+        }
         for(Book book: books){
             if(book.id == id){
                 books.remove(book);
                 return "Thank you! Enjoy the book.";
             }
         }
-        return null;
+        throw new BookIsNotAvailableException();
     }
 
     public List<Book> getPreExistingBooks(){

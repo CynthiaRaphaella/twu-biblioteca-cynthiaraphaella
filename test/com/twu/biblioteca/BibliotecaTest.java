@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 
 import com.twu.biblioteca.data.Book;
+import com.twu.biblioteca.expections.BookIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidMenuException;
 import org.junit.Test;
 
@@ -58,7 +59,7 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void bookCheckoutCannotAppearAtBookList(){
+    public void bookCheckoutCannotAppearAtBookList() throws BookIsNotAvailableException {
         BibliotecaApp app = new BibliotecaApp();
         app.startBibliotecaApplication();
         List<Book> preExistingBooks = app.getPreExistingBooks();
@@ -70,6 +71,25 @@ public class BibliotecaTest {
             assertNotEquals(bookToGet.name, book.name);
         }
         assertNotNull(message);
+    }
+
+    @Test(expected = BookIsNotAvailableException.class)
+    public void bookIsNotAvaliableMessage() throws BookIsNotAvailableException {
+        BibliotecaApp app = new BibliotecaApp();
+        app.startBibliotecaApplication();
+
+        List<Book> preExistingBooks = app.getPreExistingBooks();
+        Book bookToGet = preExistingBooks.get(1);
+        app.checkoutBook(bookToGet.id);
+
+        app.checkoutBook(bookToGet.id);
+    }
+
+    @Test(expected = BookIsNotAvailableException.class)
+    public void selectNegativeBookId() throws BookIsNotAvailableException {
+        BibliotecaApp app = new BibliotecaApp();
+        app.startBibliotecaApplication();
+        app.checkoutBook(-1);
     }
 
 
