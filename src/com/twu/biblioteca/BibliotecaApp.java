@@ -67,7 +67,7 @@ public class BibliotecaApp {
         return preExistingBooks;
     }
 
-    public List<Book> getAvaliableBooks(){
+    public List<Book> getAvailableBooks(){
         return books;
     }
 

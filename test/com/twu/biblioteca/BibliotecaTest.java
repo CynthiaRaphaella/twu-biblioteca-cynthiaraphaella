@@ -32,7 +32,7 @@ public class BibliotecaTest {
         String message = app.startBibliotecaApplication();
 
         List<Book> preExistingBooks = app.getPreExistingBooks();
-        List<Book> bookList = app.getAvaliableBooks();
+        List<Book> bookList = app.getAvailableBooks();
 
         assertEquals(preExistingBooks.size(), bookList.size());
         assertEquals(preExistingBooks.get(0).name, bookList.get(0).name);
@@ -66,7 +66,7 @@ public class BibliotecaTest {
         Book bookToGet = preExistingBooks.get(1);
         String message = app.checkoutBook(bookToGet.id);
 
-        List<Book> books = app.getAvaliableBooks();
+        List<Book> books = app.getAvailableBooks();
         for (Book book: books){
             assertNotEquals(bookToGet.name, book.name);
         }
