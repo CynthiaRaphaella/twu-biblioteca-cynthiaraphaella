@@ -24,13 +24,16 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void listAllBooksWhenStart(){
+    public void loadAllPreExistingBooksWhenStart(){
         BibliotecaApp app = new BibliotecaApp();
-        Book book1 = new Book("Book 1");
-        app.addBookToBiblioteca(book1);
+        String message = app.startBibliotecaApplication();
 
+        List<Book> preExistingBooks = app.getPreExistingBooks();
         List<Book> bookList = app.showAllBooks();
-        assertEquals("Book 1", bookList.get(0).name);
 
+        assertEquals(preExistingBooks.size(), bookList.size());
+        assertEquals(preExistingBooks.get(0).name, bookList.get(0).name);
+        assertEquals(preExistingBooks.get(0).author, bookList.get(0).author);
+        assertEquals(preExistingBooks.get(0).year, bookList.get(0).year);
     }
 }
