@@ -45,13 +45,14 @@ public class BibliotecaApp {
         }
     }
 
-    public void checkoutBook(int id){
+    public String checkoutBook(int id){
         for(Book book: books){
             if(book.id == id){
                 books.remove(book);
-                break;
+                return "Thank you! Enjoy the book.";
             }
         }
+        return null;
     }
 
     public List<Book> getPreExistingBooks(){

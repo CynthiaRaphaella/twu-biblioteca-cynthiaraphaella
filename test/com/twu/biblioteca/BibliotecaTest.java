@@ -63,12 +63,13 @@ public class BibliotecaTest {
         app.startBibliotecaApplication();
         List<Book> preExistingBooks = app.getPreExistingBooks();
         Book bookToGet = preExistingBooks.get(1);
-        app.checkoutBook(bookToGet.id);
+        String message = app.checkoutBook(bookToGet.id);
 
         List<Book> books = app.getAvaliableBooks();
         for (Book book: books){
             assertNotEquals(bookToGet.name, book.name);
         }
+        assertNotNull(message);
     }
 
 
