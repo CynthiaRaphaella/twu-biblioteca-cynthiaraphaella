@@ -92,5 +92,19 @@ public class BibliotecaTest {
         app.checkoutBook(-1);
     }
 
+    public void returnBook() throws BookIsNotAvailableException {
+        BibliotecaApp app = new BibliotecaApp();
+        app.startBibliotecaApplication();
+
+        List<Book> preExistingBooks = app.getPreExistingBooks();
+        Book bookToGet = preExistingBooks.get(1);
+        app.checkoutBook(bookToGet.id);
+
+        String message = app.returnBook(bookToGet.id);
+        assertNotNull(message);
+    }
+
+
+
 
 }

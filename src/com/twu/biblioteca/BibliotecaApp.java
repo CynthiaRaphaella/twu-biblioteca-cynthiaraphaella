@@ -41,7 +41,7 @@ public class BibliotecaApp {
         }
         else{
             if(menu.get(option).equals(LIST_BOOKS)){
-                showAllAvaliableBooks();
+                showAllAvailableBooks();
             }
         }
     }
@@ -59,6 +59,16 @@ public class BibliotecaApp {
         throw new BookIsNotAvailableException();
     }
 
+    public String returnBook(int id){
+        for(Book book: getPreExistingBooks()){
+            if(book.id == id){
+                books.add(book);
+                return "Thank you for returning the book.";
+            }
+        }
+        return null;
+    }
+
     public List<Book> getPreExistingBooks(){
         List<Book> preExistingBooks = new ArrayList<Book>();
         preExistingBooks.add(new Book(1, "Book 1", "Author", "1990"));
@@ -71,7 +81,7 @@ public class BibliotecaApp {
         return books;
     }
 
-    public void showAllAvaliableBooks(){
+    public void showAllAvailableBooks(){
         for(Book book: books){
             System.out.println(book.name);
         }
