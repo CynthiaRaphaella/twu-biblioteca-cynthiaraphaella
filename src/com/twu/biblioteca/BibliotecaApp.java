@@ -51,8 +51,8 @@ public class BibliotecaApp {
             throw new BookIsNotAvailableException();
         }
         for(Book book: books){
-            if(book.id == id){
-                books.remove(book);
+            if(book.id == id && book.isAvailable){
+                book.isAvailable = false;
                 return "Thank you! Enjoy the book.";
             }
         }
@@ -78,7 +78,13 @@ public class BibliotecaApp {
     }
 
     public List<Book> getAvailableBooks(){
-        return books;
+        List<Book> availableBooks = new ArrayList<Book>();
+        for(Book book: books){
+            if(book.isAvailable){
+                availableBooks.add(book);
+            }
+        }
+        return availableBooks;
     }
 
     public void showAllAvailableBooks(){
