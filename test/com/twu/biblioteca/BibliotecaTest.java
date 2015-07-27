@@ -64,8 +64,7 @@ public class BibliotecaTest {
     public void bookCheckoutCannotAppearAtBookList() throws BookIsNotAvailableException {
         BibliotecaApp app = new BibliotecaApp();
         app.loadBibliotecaApplication();
-        List<Book> preExistingBooks = app.getPreExistingBooks();
-        Book bookToGet = preExistingBooks.get(1);
+        Book bookToGet = getABookFromExistentList(app);
         String message = app.checkoutBook(bookToGet.id);
 
         List<Book> books = app.getAvailableBooks();
@@ -80,8 +79,7 @@ public class BibliotecaTest {
         BibliotecaApp app = new BibliotecaApp();
         app.loadBibliotecaApplication();
 
-        List<Book> preExistingBooks = app.getPreExistingBooks();
-        Book bookToGet = preExistingBooks.get(1);
+        Book bookToGet = getABookFromExistentList(app);
         app.checkoutBook(bookToGet.id);
 
         app.checkoutBook(bookToGet.id);
@@ -99,11 +97,10 @@ public class BibliotecaTest {
         BibliotecaApp app = new BibliotecaApp();
         app.loadBibliotecaApplication();
 
-        List<Book> preExistingBooks = app.getPreExistingBooks();
-        Book bookToGet = preExistingBooks.get(1);
-        app.checkoutBook(bookToGet.id);
+        Book bookToReturn = getABookFromExistentList(app);
+        app.checkoutBook(bookToReturn.id);
 
-        String message = app.returnBook(bookToGet.id);
+        String message = app.returnBook(bookToReturn.id);
         assertEquals(MessagesUtil.RETURN_MESSAGE, message);
     }
 
@@ -112,9 +109,13 @@ public class BibliotecaTest {
         BibliotecaApp app = new BibliotecaApp();
         app.loadBibliotecaApplication();
 
+        Book bookToReturn = getABookFromExistentList(app);
+        app.returnBook(bookToReturn.id);
+    }
+
+    private Book getABookFromExistentList(BibliotecaApp app) {
         List<Book> preExistingBooks = app.getPreExistingBooks();
-        Book bookToGet = preExistingBooks.get(1);
-        app.returnBook(bookToGet.id);
+        return preExistingBooks.get(1);
     }
 
 }

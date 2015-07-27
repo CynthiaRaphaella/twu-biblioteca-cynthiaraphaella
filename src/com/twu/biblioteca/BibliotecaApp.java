@@ -47,11 +47,11 @@ public class BibliotecaApp {
                 print(e.getMessage());
             }
         }
-
     }
 
     private void printMenu(){
-        print("Choose one option bellow. Type the number of the option.");
+        print("");
+        print(MessagesUtil.MENU_WELCOME_MESSAGE);
         for(String item: menu){
             print(item);
         }
@@ -83,7 +83,7 @@ public class BibliotecaApp {
                 printAllAvailableBooks();
             }
             else if(menu.get(menuOption).equals(CHECKOUT_BOOK)){
-                print("**** Choose the book and type its code to checkout. ****");
+                print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
                 printAllAvailableBooks();
                 int bookCode = console.nextInt();
                 try {
@@ -93,7 +93,7 @@ public class BibliotecaApp {
                 }
             }
             else if(menu.get(menuOption).equals(RETURN_BOOK)){
-                print("*** Type the book's code to return. ***");
+                print(MessagesUtil.CHOOSE_BOOK_RETURN);
                 int bookCode = console.nextInt();
                 try {
                     print(returnBook(bookCode));
@@ -146,13 +146,13 @@ public class BibliotecaApp {
     }
 
     public void printAllAvailableBooks(){
-        print("*** List of all books ***");
+        print(MessagesUtil.LIST_ALL_BOOKS_MESSAGE);
         for(Book book: books){
             if(book.isAvailable){
                 print(book.id + ". " + book.name);
             }
         }
-        print("**********************");
+        print("***********************************");
     }
 
     public List<String> getMenu(){
