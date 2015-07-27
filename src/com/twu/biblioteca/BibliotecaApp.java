@@ -8,25 +8,60 @@ import com.twu.biblioteca.util.MessagesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class BibliotecaApp {
+
+    Scanner console;
 
     private List<Book> books = new ArrayList<Book>();
     private List<String> menu = new ArrayList<String>();
 
-    private String LIST_BOOKS = "1. Listar todos os livros";
+    private String LIST_BOOKS = "1. List all books";
+    private String CHECKOUT_BOOK = "2. Get a book";
+    private String RETURN_BOOK = "3. Return a book";
+    private String QUIT_OPTION = "4. Quit";
 
     public BibliotecaApp(){
     }
 
-    public String startBibliotecaApplication(){
+    public String loadBibliotecaApplication(){
         seedMenu();
         seedPreExistingBooks();
         return MessagesUtil.WELCOME_MESSAGE;
     }
 
+    public void startBiblioteca(){
+        String message = loadBibliotecaApplication();
+        print(message);
+
+        console = new Scanner(System.in);
+        int nextOption = 0;
+
+        while (nextOption != 4){
+            printMenu();
+            nextOption = console.nextInt();
+            try {
+                chooseMenuOption(nextOption);
+            } catch (InvalidMenuException e) {
+                print(e.getMessage());
+            }
+        }
+
+    }
+
+    private void printMenu(){
+        print("Choose one option bellow. Type the number of the option.");
+        for(String item: menu){
+            print(item);
+        }
+    }
+
     private void seedMenu() {
         menu.add(LIST_BOOKS);
+        menu.add(CHECKOUT_BOOK);
+        menu.add(RETURN_BOOK);
+        menu.add(QUIT_OPTION);
     }
 
     public List<Book> seedPreExistingBooks(){
@@ -38,12 +73,33 @@ public class BibliotecaApp {
     }
 
     public void chooseMenuOption(int option) throws InvalidMenuException {
+        int menuOption;
         if(option > menu.size() || option < 1) {
             throw new InvalidMenuException();
         }
         else{
-            if(menu.get(option).equals(LIST_BOOKS)){
-                showAllAvailableBooks();
+            menuOption = option - 1;
+            if(menu.get(menuOption).equals(LIST_BOOKS)){
+                printAllAvailableBooks();
+            }
+            else if(menu.get(menuOption).equals(CHECKOUT_BOOK)){
+                print("**** Choose the book and type its code to checkout. ****");
+                printAllAvailableBooks();
+                int bookCode = console.nextInt();
+                try {
+                    print(checkoutBook(bookCode));
+                } catch (BookIsNotAvailableException e) {
+                    print(e.getMessage());
+                }
+            }
+            else if(menu.get(menuOption).equals(RETURN_BOOK)){
+                print("*** Type the book's code to return. ***");
+                int bookCode = console.nextInt();
+                try {
+                    print(returnBook(bookCode));
+                } catch (InvalidBookException e) {
+                    print(e.getMessage());
+                }
             }
         }
     }
@@ -64,7 +120,7 @@ public class BibliotecaApp {
     public String returnBook(int id) throws InvalidBookException {
         for(Book book: books){
             if(book.id == id && !book.isAvailable){
-                books.add(book);
+                book.isAvailable = true;
                 return MessagesUtil.RETURN_MESSAGE;
             }
         }
@@ -89,17 +145,26 @@ public class BibliotecaApp {
         return availableBooks;
     }
 
-    public void showAllAvailableBooks(){
+    public void printAllAvailableBooks(){
+        print("*** List of all books ***");
         for(Book book: books){
-            System.out.println(book.name);
+            if(book.isAvailable){
+                print(book.id + ". " + book.name);
+            }
         }
+        print("**********************");
     }
 
     public List<String> getMenu(){
         return menu;
     }
 
-    public void main(String[] args) {
-        System.out.println("Hello, world!");
+    private void print(String message) {
+        System.out.println(message);
+    }
+
+    public static void main(String[] args) {
+        BibliotecaApp app = new BibliotecaApp();
+        app.startBiblioteca();
     }
 }

@@ -24,14 +24,14 @@ public class BibliotecaTest {
     @Test
     public void showWelcomeMessageWhenIStartTheApp() {
         BibliotecaApp app = new BibliotecaApp();
-        String message = app.startBibliotecaApplication();
+        String message = app.loadBibliotecaApplication();
         assertEquals(MessagesUtil.WELCOME_MESSAGE, message);
     }
 
     @Test
     public void loadAllPreExistingBooksWhenStart(){
         BibliotecaApp app = new BibliotecaApp();
-        String message = app.startBibliotecaApplication();
+        String message = app.loadBibliotecaApplication();
 
         List<Book> preExistingBooks = app.getPreExistingBooks();
         List<Book> bookList = app.getAvailableBooks();
@@ -45,7 +45,7 @@ public class BibliotecaTest {
     @Test(expected=InvalidMenuException.class)
     public void selectInvalidOptionMenu() throws InvalidMenuException {
         BibliotecaApp app = new BibliotecaApp();
-        app.startBibliotecaApplication();
+        app.loadBibliotecaApplication();
         List<String> menu = app.getMenu();
         int option = menu.size() + 1;
         app.chooseMenuOption(option);
@@ -54,7 +54,7 @@ public class BibliotecaTest {
     @Test(expected=InvalidMenuException.class)
     public void selectNegativeOptionMenu() throws InvalidMenuException {
         BibliotecaApp app = new BibliotecaApp();
-        app.startBibliotecaApplication();
+        app.loadBibliotecaApplication();
         List<String> menu = app.getMenu();
         int option = -1;
         app.chooseMenuOption(option);
@@ -63,7 +63,7 @@ public class BibliotecaTest {
     @Test
     public void bookCheckoutCannotAppearAtBookList() throws BookIsNotAvailableException {
         BibliotecaApp app = new BibliotecaApp();
-        app.startBibliotecaApplication();
+        app.loadBibliotecaApplication();
         List<Book> preExistingBooks = app.getPreExistingBooks();
         Book bookToGet = preExistingBooks.get(1);
         String message = app.checkoutBook(bookToGet.id);
@@ -78,7 +78,7 @@ public class BibliotecaTest {
     @Test(expected = BookIsNotAvailableException.class)
     public void bookIsNotAvaliableMessage() throws BookIsNotAvailableException {
         BibliotecaApp app = new BibliotecaApp();
-        app.startBibliotecaApplication();
+        app.loadBibliotecaApplication();
 
         List<Book> preExistingBooks = app.getPreExistingBooks();
         Book bookToGet = preExistingBooks.get(1);
@@ -90,14 +90,14 @@ public class BibliotecaTest {
     @Test(expected = BookIsNotAvailableException.class)
     public void selectNegativeBookId() throws BookIsNotAvailableException {
         BibliotecaApp app = new BibliotecaApp();
-        app.startBibliotecaApplication();
+        app.loadBibliotecaApplication();
         app.checkoutBook(-1);
     }
 
     @Test
     public void returnBook() throws BookIsNotAvailableException, InvalidBookException {
         BibliotecaApp app = new BibliotecaApp();
-        app.startBibliotecaApplication();
+        app.loadBibliotecaApplication();
 
         List<Book> preExistingBooks = app.getPreExistingBooks();
         Book bookToGet = preExistingBooks.get(1);
@@ -110,7 +110,7 @@ public class BibliotecaTest {
     @Test(expected = InvalidBookException.class)
     public void returnAvailableBook() throws InvalidBookException {
         BibliotecaApp app = new BibliotecaApp();
-        app.startBibliotecaApplication();
+        app.loadBibliotecaApplication();
 
         List<Book> preExistingBooks = app.getPreExistingBooks();
         Book bookToGet = preExistingBooks.get(1);
