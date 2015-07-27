@@ -5,6 +5,7 @@ import com.twu.biblioteca.data.Book;
 import com.twu.biblioteca.expections.BookIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidBookException;
 import com.twu.biblioteca.expections.InvalidMenuException;
+import com.twu.biblioteca.util.MessagesUtil;
 import org.junit.Test;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class BibliotecaTest {
     public void showWelcomeMessageWhenIStartTheApp() {
         BibliotecaApp app = new BibliotecaApp();
         String message = app.startBibliotecaApplication();
-        assertNotNull(message);
+        assertEquals(MessagesUtil.WELCOME_MESSAGE, message);
     }
 
     @Test
@@ -71,7 +72,7 @@ public class BibliotecaTest {
         for (Book book: books){
             assertNotEquals(bookToGet.name, book.name);
         }
-        assertNotNull(message);
+        assertEquals(MessagesUtil.CHECKOUT_MESSAGE, message);
     }
 
     @Test(expected = BookIsNotAvailableException.class)
@@ -103,7 +104,7 @@ public class BibliotecaTest {
         app.checkoutBook(bookToGet.id);
 
         String message = app.returnBook(bookToGet.id);
-        assertNotNull(message);
+        assertEquals(MessagesUtil.RETURN_MESSAGE, message);
     }
 
     @Test(expected = InvalidBookException.class)

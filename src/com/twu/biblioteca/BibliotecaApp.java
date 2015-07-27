@@ -4,6 +4,7 @@ import com.twu.biblioteca.data.Book;
 import com.twu.biblioteca.expections.BookIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidBookException;
 import com.twu.biblioteca.expections.InvalidMenuException;
+import com.twu.biblioteca.util.MessagesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class BibliotecaApp {
     public String startBibliotecaApplication(){
         seedMenu();
         seedPreExistingBooks();
-        return "Bem-vindo ao sistema de biblioteca";
+        return MessagesUtil.WELCOME_MESSAGE;
     }
 
     private void seedMenu() {
@@ -54,7 +55,7 @@ public class BibliotecaApp {
         for(Book book: books){
             if(book.id == id && book.isAvailable){
                 book.isAvailable = false;
-                return "Thank you! Enjoy the book.";
+                return MessagesUtil.CHECKOUT_MESSAGE;
             }
         }
         throw new BookIsNotAvailableException();
@@ -64,7 +65,7 @@ public class BibliotecaApp {
         for(Book book: books){
             if(book.id == id && !book.isAvailable){
                 books.add(book);
-                return "Thank you for returning the book.";
+                return MessagesUtil.RETURN_MESSAGE;
             }
         }
         throw new InvalidBookException();
