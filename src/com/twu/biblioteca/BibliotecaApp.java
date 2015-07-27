@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.data.Book;
 import com.twu.biblioteca.expections.BookIsNotAvailableException;
+import com.twu.biblioteca.expections.InvalidBookException;
 import com.twu.biblioteca.expections.InvalidMenuException;
 
 import java.util.ArrayList;
@@ -59,14 +60,14 @@ public class BibliotecaApp {
         throw new BookIsNotAvailableException();
     }
 
-    public String returnBook(int id){
-        for(Book book: getPreExistingBooks()){
-            if(book.id == id){
+    public String returnBook(int id) throws InvalidBookException {
+        for(Book book: books){
+            if(book.id == id && !book.isAvailable){
                 books.add(book);
                 return "Thank you for returning the book.";
             }
         }
-        return null;
+        throw new InvalidBookException();
     }
 
     public List<Book> getPreExistingBooks(){

@@ -3,6 +3,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.data.Book;
 import com.twu.biblioteca.expections.BookIsNotAvailableException;
+import com.twu.biblioteca.expections.InvalidBookException;
 import com.twu.biblioteca.expections.InvalidMenuException;
 import org.junit.Test;
 
@@ -92,7 +93,8 @@ public class BibliotecaTest {
         app.checkoutBook(-1);
     }
 
-    public void returnBook() throws BookIsNotAvailableException {
+    @Test
+    public void returnBook() throws BookIsNotAvailableException, InvalidBookException {
         BibliotecaApp app = new BibliotecaApp();
         app.startBibliotecaApplication();
 
@@ -102,6 +104,16 @@ public class BibliotecaTest {
 
         String message = app.returnBook(bookToGet.id);
         assertNotNull(message);
+    }
+
+    @Test(expected = InvalidBookException.class)
+    public void returnAvailableBook() throws InvalidBookException {
+        BibliotecaApp app = new BibliotecaApp();
+        app.startBibliotecaApplication();
+
+        List<Book> preExistingBooks = app.getPreExistingBooks();
+        Book bookToGet = preExistingBooks.get(1);
+        app.returnBook(bookToGet.id);
     }
 
 }
