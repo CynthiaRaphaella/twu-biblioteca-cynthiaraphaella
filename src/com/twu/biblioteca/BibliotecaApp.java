@@ -13,18 +13,19 @@ import java.util.Scanner;
 
 public class BibliotecaApp {
 
-    Scanner console;
-    BibliotecaManager bibliotecaManager;
+    private Scanner console;
+
+    private BibliotecaManager bibliotecaManager;
 
     public BibliotecaApp(){
+        bibliotecaManager = new BibliotecaManager();
     }
 
-    public BibliotecaApp(BibliotecaManager bibliotecaManager){
-        this.bibliotecaManager = bibliotecaManager;
+    public BibliotecaManager getBibliotecaManager() {
+        return bibliotecaManager;
     }
 
     public void startBiblioteca(){
-        bibliotecaManager = new BibliotecaManager();
         String message = bibliotecaManager.loadBibliotecaApplication();
         print(message);
 
@@ -33,20 +34,15 @@ public class BibliotecaApp {
 
         while (nextOption != 4){
             printMenu();
-            nextOption = console.nextInt();
             try {
+                nextOption = Integer.parseInt(console.next());
                 chooseMenuOption(nextOption);
-            } catch (InvalidMenuException e) {
+            } catch (NumberFormatException e){
+                print(new InvalidMenuException().getMessage());
+            }
+            catch (InvalidMenuException e) {
                 print(e.getMessage());
             }
-        }
-    }
-
-    private void printMenu(){
-        print("");
-        print(MessagesUtil.MENU_WELCOME_MESSAGE);
-        for(String item: bibliotecaManager.getMenu()){
-            print(item);
         }
     }
 
@@ -59,32 +55,37 @@ public class BibliotecaApp {
         }
         else{
             menuOption = option - 1;
-            if(menu.get(menuOption).equals(MessagesUtil.LIST_BOOKS_MENU)){
-                printAllAvailableBooks();
-            }
-            else if(menu.get(menuOption).equals(MessagesUtil.CHECKOUT_BOOK_MENU)){
-                print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
-                printAllAvailableBooks();
-                int bookCode = console.nextInt();
-                try {
+            try{
+                if(menu.get(menuOption).equals(MessagesUtil.LIST_BOOKS_MENU)){
+                    printAllAvailableBooks();
+                }
+                else if(menu.get(menuOption).equals(MessagesUtil.CHECKOUT_BOOK_MENU)){
+                    print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
+                    printAllAvailableBooks();
+                    int bookCode = Integer.parseInt(console.next());
                     print(bibliotecaManager.checkoutBook(bookCode));
-                } catch (BookIsNotAvailableException e) {
-                    print(e.getMessage());
+
+                }
+                else if(menu.get(menuOption).equals(MessagesUtil.RETURN_BOOK_MENU)){
+                    print(MessagesUtil.CHOOSE_BOOK_RETURN);
+                    int bookCode = Integer.parseInt(console.next());
+                    print(bibliotecaManager.returnBook(bookCode));
+
                 }
             }
-            else if(menu.get(menuOption).equals(MessagesUtil.RETURN_BOOK_MENU)){
-                print(MessagesUtil.CHOOSE_BOOK_RETURN);
-                int bookCode = console.nextInt();
-                try {
-                    print(bibliotecaManager.returnBook(bookCode));
-                } catch (InvalidBookException e) {
-                    print(e.getMessage());
-                }
+            catch (BookIsNotAvailableException e) {
+                print(e.getMessage());
+            }
+            catch (InvalidBookException e) {
+                print(e.getMessage());
+            }
+            catch (NumberFormatException e){
+                throw new InvalidMenuException();
             }
         }
     }
 
-    public void printAllAvailableBooks(){
+    private void printAllAvailableBooks(){
         print(MessagesUtil.LIST_ALL_BOOKS_MESSAGE);
         List<Book> availableBooks = bibliotecaManager.getAvailableBooks();
         for(Book book: availableBooks){
@@ -93,6 +94,14 @@ public class BibliotecaApp {
             }
         }
         print("***********************************");
+    }
+
+    private void printMenu(){
+        print("");
+        print(MessagesUtil.MENU_WELCOME_MESSAGE);
+        for(String item: bibliotecaManager.getMenu()){
+            print(item);
+        }
     }
 
     private void print(String message) {
