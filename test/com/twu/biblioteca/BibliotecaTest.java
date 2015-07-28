@@ -5,6 +5,7 @@ import com.twu.biblioteca.data.Book;
 import com.twu.biblioteca.expections.BookIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidBookException;
 import com.twu.biblioteca.expections.InvalidMenuException;
+import com.twu.biblioteca.services.BibliotecaManager;
 import com.twu.biblioteca.util.MessagesUtil;
 import org.junit.Test;
 
@@ -23,97 +24,99 @@ public class BibliotecaTest {
 
     @Test
     public void showWelcomeMessageWhenIStartTheApp() {
-        BibliotecaApp app = new BibliotecaApp();
+        BibliotecaManager app = new BibliotecaManager();
         String message = app.loadBibliotecaApplication();
         assertEquals(MessagesUtil.WELCOME_MESSAGE, message);
     }
 
     @Test
     public void loadAllPreExistingBooksWhenStart(){
-        BibliotecaApp app = new BibliotecaApp();
+        BibliotecaManager app = new BibliotecaManager();
         String message = app.loadBibliotecaApplication();
 
         List<Book> preExistingBooks = app.getPreExistingBooks();
         List<Book> bookList = app.getAvailableBooks();
 
         assertEquals(preExistingBooks.size(), bookList.size());
-        assertEquals(preExistingBooks.get(0).name, bookList.get(0).name);
-        assertEquals(preExistingBooks.get(0).author, bookList.get(0).author);
-        assertEquals(preExistingBooks.get(0).year, bookList.get(0).year);
+        assertEquals(preExistingBooks.get(0).getName(), bookList.get(0).getName());
+        assertEquals(preExistingBooks.get(0).getAuthor(), bookList.get(0).getAuthor());
+        assertEquals(preExistingBooks.get(0).getYear(), bookList.get(0).getYear());
     }
 
     @Test(expected=InvalidMenuException.class)
     public void selectInvalidOptionMenu() throws InvalidMenuException {
-        BibliotecaApp app = new BibliotecaApp();
-        app.loadBibliotecaApplication();
-        List<String> menu = app.getMenu();
+        BibliotecaManager manager = new BibliotecaManager();
+        BibliotecaApp app = new BibliotecaApp(manager);
+        manager.loadBibliotecaApplication();
+        List<String> menu = manager.getMenu();
         int option = menu.size() + 1;
         app.chooseMenuOption(option);
     }
 
     @Test(expected=InvalidMenuException.class)
     public void selectNegativeOptionMenu() throws InvalidMenuException {
-        BibliotecaApp app = new BibliotecaApp();
-        app.loadBibliotecaApplication();
-        List<String> menu = app.getMenu();
+        BibliotecaManager manager = new BibliotecaManager();
+        BibliotecaApp app = new BibliotecaApp(manager);
+        manager.loadBibliotecaApplication();
+        List<String> menu = manager.getMenu();
         int option = -1;
         app.chooseMenuOption(option);
     }
 
     @Test
     public void bookCheckoutCannotAppearAtBookList() throws BookIsNotAvailableException {
-        BibliotecaApp app = new BibliotecaApp();
+        BibliotecaManager app = new BibliotecaManager();
         app.loadBibliotecaApplication();
         Book bookToGet = getABookFromExistentList(app);
-        String message = app.checkoutBook(bookToGet.id);
+        String message = app.checkoutBook(bookToGet.getId());
 
         List<Book> books = app.getAvailableBooks();
         for (Book book: books){
-            assertNotEquals(bookToGet.name, book.name);
+            assertNotEquals(bookToGet.getName(), book.getName());
         }
         assertEquals(MessagesUtil.CHECKOUT_MESSAGE, message);
     }
 
     @Test(expected = BookIsNotAvailableException.class)
     public void bookIsNotAvaliableMessage() throws BookIsNotAvailableException {
-        BibliotecaApp app = new BibliotecaApp();
+        BibliotecaManager app = new BibliotecaManager();
         app.loadBibliotecaApplication();
 
         Book bookToGet = getABookFromExistentList(app);
-        app.checkoutBook(bookToGet.id);
+        app.checkoutBook(bookToGet.getId());
 
-        app.checkoutBook(bookToGet.id);
+        app.checkoutBook(bookToGet.getId());
     }
 
     @Test(expected = BookIsNotAvailableException.class)
     public void selectNegativeBookId() throws BookIsNotAvailableException {
-        BibliotecaApp app = new BibliotecaApp();
+        BibliotecaManager app = new BibliotecaManager();
         app.loadBibliotecaApplication();
         app.checkoutBook(-1);
     }
 
     @Test
     public void returnBook() throws BookIsNotAvailableException, InvalidBookException {
-        BibliotecaApp app = new BibliotecaApp();
+        BibliotecaManager app = new BibliotecaManager();
         app.loadBibliotecaApplication();
 
         Book bookToReturn = getABookFromExistentList(app);
-        app.checkoutBook(bookToReturn.id);
+        app.checkoutBook(bookToReturn.getId());
 
-        String message = app.returnBook(bookToReturn.id);
+        String message = app.returnBook(bookToReturn.getId());
         assertEquals(MessagesUtil.RETURN_MESSAGE, message);
     }
 
     @Test(expected = InvalidBookException.class)
     public void returnAvailableBook() throws InvalidBookException {
-        BibliotecaApp app = new BibliotecaApp();
+        BibliotecaManager app = new BibliotecaManager();
         app.loadBibliotecaApplication();
 
         Book bookToReturn = getABookFromExistentList(app);
-        app.returnBook(bookToReturn.id);
+        app.returnBook(bookToReturn.getId());
     }
 
-    private Book getABookFromExistentList(BibliotecaApp app) {
+    private Book getABookFromExistentList(BibliotecaManager app) {
         List<Book> preExistingBooks = app.getPreExistingBooks();
         return preExistingBooks.get(1);
     }
