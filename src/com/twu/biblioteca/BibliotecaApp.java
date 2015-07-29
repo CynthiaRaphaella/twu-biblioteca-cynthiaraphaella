@@ -7,12 +7,12 @@ import com.twu.biblioteca.expections.InvalidMenuException;
 import com.twu.biblioteca.services.BibliotecaManager;
 import com.twu.biblioteca.util.MessagesUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class BibliotecaApp {
 
+    public static final int EXIT_OPTION = 4;
     private Scanner console;
 
     private BibliotecaManager bibliotecaManager;
@@ -32,7 +32,7 @@ public class BibliotecaApp {
         console = new Scanner(System.in);
         int nextOption = 0;
 
-        while (nextOption != 4){
+        while (nextOption != EXIT_OPTION){
             printMenu();
             try {
                 nextOption = Integer.parseInt(console.next());
