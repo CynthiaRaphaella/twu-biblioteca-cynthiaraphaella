@@ -1,83 +1,97 @@
 package com.twu.biblioteca.services;
 
 import com.twu.biblioteca.data.Book;
-import com.twu.biblioteca.expections.BookIsNotAvailableException;
-import com.twu.biblioteca.expections.InvalidBookException;
-import com.twu.biblioteca.expections.InvalidMenuException;
+import com.twu.biblioteca.data.Item;
+import com.twu.biblioteca.data.Movie;
+import com.twu.biblioteca.expections.ItemIsNotAvailableException;
+import com.twu.biblioteca.expections.InvalidItemException;
 import com.twu.biblioteca.util.MessagesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class BibliotecaManager {
 
-    private List<Book> books = new ArrayList<Book>();
+    private List<Item> itens = new ArrayList<Item>();
     private List<String> menu = new ArrayList<String>();
 
     public String loadBibliotecaApplication(){
         seedMenu();
-        seedPreExistingBooks();
+        seedPreExistingItens(getPreExistingItens());
         return MessagesUtil.WELCOME_MESSAGE;
     }
 
-    private void seedMenu() {
+    public void seedMenu() {
         menu.add(MessagesUtil.LIST_BOOKS_MENU);
         menu.add(MessagesUtil.CHECKOUT_BOOK_MENU);
         menu.add(MessagesUtil.RETURN_BOOK_MENU);
         menu.add(MessagesUtil.QUIT_OPTION_MENU);
     }
 
-    public List<Book> seedPreExistingBooks(){
-        List<Book> preExistingBooks = getPreExistingBooks();
-        for(Book preExisting: preExistingBooks){
-            books.add(preExisting);
+    public List<Item> seedPreExistingItens(List<Item> preExistingItens){
+        for(Item preExisting: preExistingItens){
+            itens.add(preExisting);
         }
-        return books;
+        return itens;
     }
 
-    public String checkoutBook(int id) throws BookIsNotAvailableException {
+    public String checkoutItem(int id) throws ItemIsNotAvailableException {
         if(id < 1){
-            throw new BookIsNotAvailableException();
+            throw new ItemIsNotAvailableException();
         }
-        for(Book book: books){
-            if(book.getId() == id && book.isAvailable()){
-                book.checkoutBook();
+        for(Item item: itens){
+            if(item.getId() == id && item.isAvailable()){
+                item.checkoutItem();
                 return MessagesUtil.CHECKOUT_MESSAGE;
             }
         }
-        throw new BookIsNotAvailableException();
+        throw new ItemIsNotAvailableException();
     }
 
-    public String returnBook(int id) throws InvalidBookException {
-        for(Book book: books){
-            if(book.getId() == id && !book.isAvailable()){
-                book.returnBook();
+    public String returnItem(int id) throws InvalidItemException {
+        for(Item item: itens){
+            if(item.getId() == id && !item.isAvailable()){
+                item.returnItem();
                 return MessagesUtil.RETURN_MESSAGE;
             }
         }
-        throw new InvalidBookException();
+        throw new InvalidItemException();
     }
 
-    public List<Book> getPreExistingBooks(){
-        List<Book> preExistingBooks = new ArrayList<Book>();
-        preExistingBooks.add(new Book(1, "Book 1", "Author", "1990"));
-        preExistingBooks.add(new Book(2, "Book 2", "Author", "1996"));
-        preExistingBooks.add(new Book(3, "Book 3", "Author", "2000"));
-        return preExistingBooks;
+    public List<Item> getPreExistingItens(){
+        List<Item> preExistingItens = new ArrayList<Item>();
+        preExistingItens.add(new Book(1, "Book 1", "Author", "1990"));
+        preExistingItens.add(new Book(2, "Book 2", "Author", "1996"));
+        preExistingItens.add(new Book(3, "Book 3", "Author", "2000"));
+
+        preExistingItens.add(new Movie(4, "Movie 1", "Author", "1990", "1"));
+        preExistingItens.add(new Movie(5, "Movie 2", "Author", "1996", "1"));
+        preExistingItens.add(new Movie(6, "Movie 3", "Author", "2000", "1"));
+        return preExistingItens;
     }
 
     public List<Book> getAvailableBooks(){
         List<Book> availableBooks = new ArrayList<Book>();
-        for(Book book: books){
-            if(book.isAvailable()){
-                availableBooks.add(book);
+        for(Item item: itens){
+            if(item instanceof Book && item.isAvailable()){
+                availableBooks.add((Book) item);
             }
         }
         return availableBooks;
     }
 
+    public List<Movie> getAvailableMovies(){
+        List<Movie> availableMovies = new ArrayList<Movie>();
+        for(Item item: itens){
+            if(item instanceof Movie && item.isAvailable()){
+                availableMovies.add((Movie) item);
+            }
+        }
+        return availableMovies;
+    }
+
     public List<String> getMenu(){
         return menu;
     }
+
 }

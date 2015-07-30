@@ -1,8 +1,8 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.data.Book;
-import com.twu.biblioteca.expections.BookIsNotAvailableException;
-import com.twu.biblioteca.expections.InvalidBookException;
+import com.twu.biblioteca.expections.ItemIsNotAvailableException;
+import com.twu.biblioteca.expections.InvalidItemException;
 import com.twu.biblioteca.expections.InvalidMenuException;
 import com.twu.biblioteca.services.BibliotecaManager;
 import com.twu.biblioteca.util.MessagesUtil;
@@ -63,20 +63,20 @@ public class BibliotecaApp {
                     print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
                     printAllAvailableBooks();
                     int bookCode = Integer.parseInt(console.next());
-                    print(bibliotecaManager.checkoutBook(bookCode));
+                    print(bibliotecaManager.checkoutItem(bookCode));
 
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.RETURN_BOOK_MENU)){
                     print(MessagesUtil.CHOOSE_BOOK_RETURN);
                     int bookCode = Integer.parseInt(console.next());
-                    print(bibliotecaManager.returnBook(bookCode));
+                    print(bibliotecaManager.returnItem(bookCode));
 
                 }
             }
-            catch (BookIsNotAvailableException e) {
+            catch (ItemIsNotAvailableException e) {
                 print(e.getMessage());
             }
-            catch (InvalidBookException e) {
+            catch (InvalidItemException e) {
                 print(e.getMessage());
             }
             catch (NumberFormatException e){
