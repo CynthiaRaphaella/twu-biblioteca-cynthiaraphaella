@@ -31,11 +31,8 @@ public class BibliotecaManager {
         menu.add(MessagesUtil.QUIT_OPTION_MENU);
     }
 
-    public List<Item> seedPreExistingItens(List<Item> preExistingItens){
-        for(Item preExisting: preExistingItens){
-            itens.add(preExisting);
-        }
-        return itens;
+    public void seedPreExistingItens(List<Item> preExistingItens){
+        itens.addAll(preExistingItens);
     }
 
     public String checkoutItem(int id) throws ItemIsNotAvailableException {
@@ -61,7 +58,7 @@ public class BibliotecaManager {
         throw new InvalidItemException();
     }
 
-    public List<Item> getPreExistingItens(){
+    private List<Item> getPreExistingItens(){
         List<Item> preExistingItens = new ArrayList<Item>();
         preExistingItens.add(new Book(1, "Book 1", "Author", "1990"));
         preExistingItens.add(new Book(2, "Book 2", "Author", "1996"));
@@ -74,23 +71,21 @@ public class BibliotecaManager {
     }
 
     public List<Book> getAvailableBooks(){
-        List<Book> availableBooks = new ArrayList<Book>();
-        for(Item item: itens){
-            if(item instanceof Book && item.isAvailable()){
-                availableBooks.add((Book) item);
-            }
-        }
-        return availableBooks;
+        return (List<Book>)(List<?>) getAvailableItens(Book.class);
     }
 
     public List<Movie> getAvailableMovies(){
-        List<Movie> availableMovies = new ArrayList<Movie>();
+        return (List<Movie>)(List<?>) getAvailableItens(Movie.class);
+    }
+
+    public List<Item> getAvailableItens(Class itemClass){
+        List<Item> availableItens = new ArrayList<Item>();
         for(Item item: itens){
-            if(item instanceof Movie && item.isAvailable()){
-                availableMovies.add((Movie) item);
+            if(item.getType().equals(itemClass) && item.isAvailable()){
+                availableItens.add(item);
             }
         }
-        return availableMovies;
+        return availableItens;
     }
 
     public List<String> getMenu(){

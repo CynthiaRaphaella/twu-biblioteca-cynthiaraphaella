@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.data.Book;
+import com.twu.biblioteca.data.Item;
 import com.twu.biblioteca.data.Movie;
 import com.twu.biblioteca.expections.ItemIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidItemException;

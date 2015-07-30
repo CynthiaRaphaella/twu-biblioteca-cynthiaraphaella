@@ -34,4 +34,8 @@ public class Movie extends Item{
     public String getCheckoutMessage(){
         return MessagesUtil.CHECKOUT_MOVIE_MESSAGE;
     }
+
+    public Class getType(){
+        return this.getClass();
+    }
 }

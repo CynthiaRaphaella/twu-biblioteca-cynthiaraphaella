@@ -35,4 +35,6 @@ public abstract class Item {
 
     public abstract String getCheckoutMessage();
 
+    public abstract Class getType();
+
 }

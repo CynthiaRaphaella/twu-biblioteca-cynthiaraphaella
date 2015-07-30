@@ -26,4 +26,8 @@ public class Book extends Item {
         return MessagesUtil.CHECKOUT_BOOK_MESSAGE;
     }
 
+    public Class getType(){
+        return this.getClass();
+    }
+
 }
