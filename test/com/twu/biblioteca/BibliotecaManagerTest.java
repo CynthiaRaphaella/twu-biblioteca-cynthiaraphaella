@@ -3,6 +3,8 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.data.Book;
 import com.twu.biblioteca.data.Item;
 import com.twu.biblioteca.data.Movie;
+import com.twu.biblioteca.data.User;
+import com.twu.biblioteca.expections.InvalidLibraryNumberException;
 import com.twu.biblioteca.expections.ItemIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidItemException;
 import com.twu.biblioteca.services.BibliotecaManager;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class BibliotecaManagerTest {
 
@@ -114,6 +117,22 @@ public class BibliotecaManagerTest {
     public void returnAvailableBook() throws InvalidItemException {
         Item itemToReturn = getABook();
         manager.returnItem(itemToReturn.getId());
+    }
+
+    @Test
+    public void createUserCredentials() throws InvalidLibraryNumberException {
+        String libraryNumber = "123-4567";
+        String password = "admin";
+        User user = new User(libraryNumber, password);
+        manager.getUsers().add(user);
+        assertNotNull(manager.getUser(libraryNumber));
+    }
+
+    @Test(expected = InvalidLibraryNumberException.class)
+    public void createInvalidUser() throws InvalidLibraryNumberException {
+        String libraryNumber = "1235-45678";
+        String password = "admin";
+        User user = new User(libraryNumber, password);
     }
 
     private void returnItem(Item itemToReturn, String expectedReturnMessage) throws ItemIsNotAvailableException, InvalidItemException {
