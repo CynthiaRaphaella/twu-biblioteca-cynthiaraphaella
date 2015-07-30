@@ -109,6 +109,11 @@ public class BibliotecaManager {
         return null;
     }
 
+    public boolean login(String libraryNumber, String password){
+        User user = getUser(libraryNumber);
+        return user != null && user.getPassword().equals(password);
+    }
+
     private List<Item> getPreExistingItens(){
         List<Item> preExistingItens = new ArrayList<Item>();
         preExistingItens.add(new Book(1, "Book 1", "Author", "1990"));

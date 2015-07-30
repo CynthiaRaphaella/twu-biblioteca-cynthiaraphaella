@@ -20,6 +20,10 @@ public class User {
         return libraryNumber;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     private boolean checkLibraryNumber(String number){
         return number.matches("([0-9]{3})-([0-9]{4})");
     }

@@ -15,18 +15,17 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class BibliotecaManagerTest {
 
     BibliotecaManager manager;
 
     @Before
-    public void setUp(){
+    public void setUp() throws InvalidLibraryNumberException {
         manager = new BibliotecaManager();
         manager.seedMenu();
+        manager.seedUsers(getPreExistingUsers());
         manager.seedPreExistingItens(getPreExistingItens());
     }
 
@@ -132,7 +131,25 @@ public class BibliotecaManagerTest {
     public void createInvalidUser() throws InvalidLibraryNumberException {
         String libraryNumber = "1235-45678";
         String password = "admin";
-        User user = new User(libraryNumber, password);
+        new User(libraryNumber, password);
+    }
+
+    @Test
+    public void loginAnExistentUser() throws InvalidLibraryNumberException {
+        User user = getPreExistingUsers().get(0);
+        assertTrue(manager.login(user.getLibraryNumber(), user.getPassword()));
+    }
+
+    @Test
+    public void loginAnUnexistentUser() throws InvalidLibraryNumberException {
+        User user = getPreExistingUsers().get(0);
+        assertFalse(manager.login("000-0000", user.getPassword()));
+    }
+
+    @Test
+    public void loginAnExistentUserWithWrongPassword() throws InvalidLibraryNumberException {
+        User user = getPreExistingUsers().get(0);
+        assertFalse(manager.login(user.getLibraryNumber(), ""));
     }
 
     private void returnItem(Item itemToReturn, String expectedReturnMessage) throws ItemIsNotAvailableException, InvalidItemException {
@@ -161,6 +178,13 @@ public class BibliotecaManagerTest {
         movies.add(new Movie(3, "Movie 1", "Author", "1990", "1"));
         movies.add(new Movie(4, "Movie 2", "Author", "1996", "1"));
         return movies;
+    }
+
+    private List<User> getPreExistingUsers() throws InvalidLibraryNumberException {
+        List<User> users = new ArrayList<User>();
+        users.add(new User("999-8888", "pass"));
+        users.add(new User("222-5678", "1234"));
+        return users;
     }
 
     private Book getABook() {
