@@ -25,6 +25,9 @@ public class BibliotecaManager {
         menu.add(MessagesUtil.LIST_BOOKS_MENU);
         menu.add(MessagesUtil.CHECKOUT_BOOK_MENU);
         menu.add(MessagesUtil.RETURN_BOOK_MENU);
+        menu.add(MessagesUtil.LIST_MOVIES_MENU);
+        menu.add(MessagesUtil.CHECKOUT_MOVIE_MENU);
+        menu.add(MessagesUtil.RETURN_MOVIE_MENU);
         menu.add(MessagesUtil.QUIT_OPTION_MENU);
     }
 
@@ -42,7 +45,7 @@ public class BibliotecaManager {
         for(Item item: itens){
             if(item.getId() == id && item.isAvailable()){
                 item.checkoutItem();
-                return MessagesUtil.CHECKOUT_MESSAGE;
+                return item.getCheckoutMessage();
             }
         }
         throw new ItemIsNotAvailableException();
@@ -52,7 +55,7 @@ public class BibliotecaManager {
         for(Item item: itens){
             if(item.getId() == id && !item.isAvailable()){
                 item.returnItem();
-                return MessagesUtil.RETURN_MESSAGE;
+                return item.getReturnMessage();
             }
         }
         throw new InvalidItemException();

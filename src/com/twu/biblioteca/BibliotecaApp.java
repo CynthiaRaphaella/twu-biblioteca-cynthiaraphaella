@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.data.Book;
+import com.twu.biblioteca.data.Movie;
 import com.twu.biblioteca.expections.ItemIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidItemException;
 import com.twu.biblioteca.expections.InvalidMenuException;
@@ -12,7 +13,6 @@ import java.util.Scanner;
 
 public class BibliotecaApp {
 
-    public static final int EXIT_OPTION = 4;
     private Scanner console;
 
     private BibliotecaManager bibliotecaManager;
@@ -31,8 +31,9 @@ public class BibliotecaApp {
 
         console = new Scanner(System.in);
         int nextOption = 0;
+        int exitOption = bibliotecaManager.getMenu().size();
 
-        while (nextOption != EXIT_OPTION){
+        while (nextOption != exitOption){
             printMenu();
             try {
                 nextOption = Integer.parseInt(console.next());
@@ -58,6 +59,9 @@ public class BibliotecaApp {
             try{
                 if(menu.get(menuOption).equals(MessagesUtil.LIST_BOOKS_MENU)){
                     printAllAvailableBooks();
+                }
+                else if(menu.get(menuOption).equals(MessagesUtil.LIST_MOVIES_MENU)){
+                    printAllAvailableMovies();
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.CHECKOUT_BOOK_MENU)){
                     print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
@@ -87,13 +91,32 @@ public class BibliotecaApp {
 
     private void printAllAvailableBooks(){
         print(MessagesUtil.LIST_ALL_BOOKS_MESSAGE);
+        printAsteristicsFullLine();
+        print("* Code *" + "* Name *" + "* Author *" + "* Year *");
+        printAsteristicsFullLine();
+
         List<Book> availableBooks = bibliotecaManager.getAvailableBooks();
         for(Book book: availableBooks){
             if(book.isAvailable()){
-                print(book.getId() + ". " + book.getName());
+                print("*   " + book.getId() + "   * " + book.getName() + " * " + book.getAuthor() + " * " + book.getYear() + " *");
             }
         }
-        print("***********************************");
+        printAsteristicsFullLine();
+    }
+
+    private void printAllAvailableMovies(){
+        print(MessagesUtil.LIST_ALL_MOVIES_MESSAGE);
+        printAsteristicsFullLine();
+        print("* Code *" + "* Name *" + "* Director *" + "* Year *" + "* Rate *");
+        printAsteristicsFullLine();
+
+        List<Movie> availableMovies = bibliotecaManager.getAvailableMovies();
+        for(Movie movie: availableMovies){
+            if(movie.isAvailable()){
+                print("*   " + movie.getId() + "   * " + movie.getName() + " * " + movie.getDirector() + " * " + movie.getYear() + " * " + movie.getRate() + " *");
+            }
+        }
+        printAsteristicsFullLine();
     }
 
     private void printMenu(){
@@ -108,6 +131,9 @@ public class BibliotecaApp {
         System.out.println(message);
     }
 
+    private void printAsteristicsFullLine(){
+        print("********************************************");
+    }
     public static void main(String[] args) {
         BibliotecaApp app = new BibliotecaApp();
         app.startBiblioteca();

@@ -1,5 +1,7 @@
 package com.twu.biblioteca.data;
 
+import com.twu.biblioteca.util.MessagesUtil;
+
 public class Movie extends Item{
 
     private String director;
@@ -23,5 +25,13 @@ public class Movie extends Item{
             return "unrated";
         else
             return rate;
+    }
+
+    public String getReturnMessage(){
+        return MessagesUtil.RETURN_MOVIE_MESSAGE;
+    }
+
+    public String getCheckoutMessage(){
+        return MessagesUtil.CHECKOUT_MOVIE_MESSAGE;
     }
 }

@@ -1,7 +1,6 @@
 package com.twu.biblioteca.data;
 
-
-public class Item {
+public abstract class Item {
 
     protected int id;
     protected String name;
@@ -31,5 +30,9 @@ public class Item {
     public void checkoutItem(){
         this.isAvailable = false;
     }
+
+    public abstract String getReturnMessage();
+
+    public abstract String getCheckoutMessage();
 
 }

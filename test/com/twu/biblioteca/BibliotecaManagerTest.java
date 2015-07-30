@@ -61,10 +61,10 @@ public class BibliotecaManagerTest {
 
     @Test
     public void bookCheckoutCannotAppearAtBookList() throws ItemIsNotAvailableException {
-        Book bookToGet = getABookFromExistentList();
+        Book bookToGet = getABook();
         String message = manager.checkoutItem(bookToGet.getId());
 
-        assertEquals(MessagesUtil.CHECKOUT_MESSAGE, message);
+        assertEquals(MessagesUtil.CHECKOUT_BOOK_MESSAGE, message);
 
         List<Book> books = manager.getAvailableBooks();
         for (Book book: books){
@@ -74,7 +74,7 @@ public class BibliotecaManagerTest {
 
     @Test(expected = ItemIsNotAvailableException.class)
     public void itemsNotAvaliableToCheckout() throws ItemIsNotAvailableException {
-        Item itemToGet = getABookFromExistentList();
+        Item itemToGet = getABook();
         manager.checkoutItem(itemToGet.getId());
 
         manager.checkoutItem(itemToGet.getId());
@@ -86,26 +86,26 @@ public class BibliotecaManagerTest {
     }
 
     @Test
-    public void returnItem() throws ItemIsNotAvailableException, InvalidItemException {
-        Item itemToReturn = getABookFromExistentList();
-        manager.checkoutItem(itemToReturn.getId());
+    public void returnBook() throws ItemIsNotAvailableException, InvalidItemException {
+        returnItem(getABook(), MessagesUtil.RETURN_BOOK_MESSAGE);
+    }
 
-        String message = manager.returnItem(itemToReturn.getId());
-        assertEquals(MessagesUtil.RETURN_MESSAGE, message);
+    @Test
+    public void returnMovie() throws ItemIsNotAvailableException, InvalidItemException {
+        returnItem(getAMovie(), MessagesUtil.RETURN_MOVIE_MESSAGE);
     }
 
     @Test(expected = InvalidItemException.class)
     public void returnAvailableBook() throws InvalidItemException {
-        Item itemToReturn = getABookFromExistentList();
+        Item itemToReturn = getABook();
         manager.returnItem(itemToReturn.getId());
     }
 
-    private Book getABookFromExistentList() {
-        for (Item item: getPreExistingItens()){
-            if(item instanceof Book)
-                return (Book) item;
-        }
-        return new Book(0, "", "", "");
+    private void returnItem(Item itemToReturn, String expectedReturnMessage) throws ItemIsNotAvailableException, InvalidItemException {
+        manager.checkoutItem(itemToReturn.getId());
+
+        String message = manager.returnItem(itemToReturn.getId());
+        assertEquals(expectedReturnMessage, message);
     }
 
     public List<Item> getPreExistingItens(){
@@ -126,6 +126,14 @@ public class BibliotecaManagerTest {
         movies.add(new Movie(2, "Movie 1", "Author", "1990", "1"));
         movies.add(new Movie(3, "Movie 2", "Author", "1996", "1"));
         return movies;
+    }
+
+    private Book getABook() {
+        return getPreExistingBooks().get(0);
+    }
+
+    private Movie getAMovie() {
+        return getPreExistingMovies().get(0);
     }
 
 }

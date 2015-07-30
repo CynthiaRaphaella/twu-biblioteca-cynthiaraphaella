@@ -1,5 +1,7 @@
 package com.twu.biblioteca.data;
 
+import com.twu.biblioteca.util.MessagesUtil;
+
 public class Book extends Item {
 
     private String author;
@@ -14,6 +16,14 @@ public class Book extends Item {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getReturnMessage(){
+        return MessagesUtil.RETURN_BOOK_MESSAGE;
+    }
+
+    public String getCheckoutMessage(){
+        return MessagesUtil.CHECKOUT_BOOK_MESSAGE;
     }
 
 }
