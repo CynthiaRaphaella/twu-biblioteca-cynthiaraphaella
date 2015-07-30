@@ -39,9 +39,12 @@ public class BibliotecaManagerTest {
         List<Book> bookList = manager.getAvailableBooks();
 
         assertEquals(preExistingBooks.size(), bookList.size());
-        assertEquals(preExistingBooks.get(0).getName(), bookList.get(0).getName());
-        assertEquals(preExistingBooks.get(0).getAuthor(), bookList.get(0).getAuthor());
-        assertEquals(preExistingBooks.get(0).getYear(), bookList.get(0).getYear());
+
+        for (int i = 0; i < preExistingBooks.size(); i++) {
+            assertEquals(preExistingBooks.get(i).getName(), bookList.get(i).getName());
+            assertEquals(preExistingBooks.get(i).getAuthor(), bookList.get(i).getAuthor());
+            assertEquals(preExistingBooks.get(i).getYear(), bookList.get(i).getYear());
+        }
     }
 
     @Test
@@ -57,6 +60,18 @@ public class BibliotecaManagerTest {
             assertEquals(allPreExistingMovies.get(i).getDirector(), allAvailableMovies.get(i).getDirector());
             assertEquals(allPreExistingMovies.get(i).getRate(), allAvailableMovies.get(i).getRate());
         }
+    }
+
+    @Test
+    public void showNoneBookWhenAllWereCheckout() throws ItemIsNotAvailableException {
+        List<Book> allPreExitingBooks = getPreExistingBooks();
+
+        for (Book book: allPreExitingBooks){
+            manager.checkoutItem(book.getId());
+        }
+
+        List<Book> availableBook = manager.getAvailableBooks();
+        assertEquals(0, availableBook.size());
     }
 
     @Test
@@ -118,13 +133,14 @@ public class BibliotecaManagerTest {
     private List<Book> getPreExistingBooks(){
         List<Book> books = new ArrayList<Book>();
         books.add(new Book(1, "Book 1", "Author", "1990"));
+        books.add(new Book(2, "Book 2", "Author", "1980"));
         return books;
     }
 
     private List<Movie> getPreExistingMovies(){
         List<Movie> movies = new ArrayList<Movie>();
-        movies.add(new Movie(2, "Movie 1", "Author", "1990", "1"));
-        movies.add(new Movie(3, "Movie 2", "Author", "1996", "1"));
+        movies.add(new Movie(3, "Movie 1", "Author", "1990", "1"));
+        movies.add(new Movie(4, "Movie 2", "Author", "1996", "1"));
         return movies;
     }
 
