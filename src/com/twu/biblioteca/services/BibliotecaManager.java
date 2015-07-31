@@ -18,12 +18,14 @@ public class BibliotecaManager {
     private List<Item> itens = new ArrayList<Item>();
     private List<User> users = new ArrayList<User>();
     private List<String> menu = new ArrayList<String>();
+    private User loggedUser;
 
     public String loadBibliotecaApplication(){
         try{
             loadMenu();
             loadUsers(Seed.getSeedUsers());
             loadItens(Seed.getSeedItens());
+            loggedUser = null;
         }
         catch (InvalidLibraryNumberException e){
             return e.getMessage();
@@ -90,7 +92,15 @@ public class BibliotecaManager {
 
     public boolean login(String libraryNumber, String password){
         User user = getUser(libraryNumber);
-        return user != null && user.getPassword().equals(password);
+        if(user != null && user.getPassword().equals(password)){
+            this.loggedUser = user;
+            return true;
+        }
+        return false;
+    }
+
+    public User getLoggedUser(){
+        return this.loggedUser;
     }
 
     public void loadMenu(){

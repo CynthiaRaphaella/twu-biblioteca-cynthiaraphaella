@@ -25,7 +25,7 @@ public class UserTest {
     public void createUserCredentials() throws InvalidLibraryNumberException {
         String libraryNumber = "123-4567";
         String password = "admin";
-        User user = new User(libraryNumber, password);
+        User user = new User(libraryNumber, password, "", "", "", "");
         manager.getUsers().add(user);
         assertNotNull(manager.getUser(libraryNumber));
     }
@@ -34,7 +34,7 @@ public class UserTest {
     public void createInvalidUser() throws InvalidLibraryNumberException {
         String libraryNumber = "1235-45678";
         String password = "admin";
-        new User(libraryNumber, password);
+        new User(libraryNumber, password, "", "", "", "");
     }
 
     @Test
@@ -52,6 +52,14 @@ public class UserTest {
     @Test
     public void loginAnExistentUserWithWrongPassword() throws InvalidLibraryNumberException {
         assertFalse(manager.login(getAUser().getLibraryNumber(), ""));
+    }
+
+    @Test
+    public void listInfomationsFromLoggedUser() throws InvalidLibraryNumberException{
+        User user = getAUser();
+        manager.login(user.getLibraryNumber(), user.getPassword());
+        User loggedUser = manager.getLoggedUser();
+        assertEquals(user.getLibraryNumber(), loggedUser.getLibraryNumber());
     }
 
     private User getAUser() throws InvalidLibraryNumberException {

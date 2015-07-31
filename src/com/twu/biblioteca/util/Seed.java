@@ -36,8 +36,8 @@ public class Seed {
 
     public static List<User> getSeedUsers() throws InvalidLibraryNumberException {
         List<User> users = new ArrayList<User>();
-        users.add(new User("111-1111", "1"));
-        users.add(new User("222-5678", "1234"));
+        users.add(new User("111-1111", "1", "Joao", "joao@email", "Rua castelo", "2111-1111"));
+        users.add(new User("222-5678", "1234", "Maria", "maria@email", "Rua teste", "8976-1111"));
         return users;
     }
 
@@ -49,6 +49,7 @@ public class Seed {
         menu.add(MessagesUtil.LIST_MOVIES_MENU);
         menu.add(MessagesUtil.CHECKOUT_MOVIE_MENU);
         menu.add(MessagesUtil.RETURN_MOVIE_MENU);
+        menu.add(MessagesUtil.USER_INFORMATION_MENU);
         menu.add(MessagesUtil.QUIT_OPTION_MENU);
         return menu;
     }

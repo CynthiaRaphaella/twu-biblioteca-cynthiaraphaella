@@ -1,14 +1,13 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.data.Book;
-import com.twu.biblioteca.data.Item;
-import com.twu.biblioteca.data.Movie;
+import com.twu.biblioteca.data.*;
 import com.twu.biblioteca.expections.ItemIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidItemException;
 import com.twu.biblioteca.expections.InvalidMenuException;
 import com.twu.biblioteca.services.BibliotecaManager;
 import com.twu.biblioteca.util.MessagesUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,10 +31,8 @@ public class BibliotecaApp {
         String message = bibliotecaManager.loadBibliotecaApplication();
         print(message);
 
-        boolean isLogged = false;
-        while (!isLogged){
+        while (true){
             if(login()){
-                isLogged = true;
                 int nextOption = 0;
                 int exitOption = bibliotecaManager.getMenu().size();
 
@@ -51,6 +48,7 @@ public class BibliotecaApp {
                         print(e.getMessage());
                     }
                 }
+                print("Bye!");
             }
             else{
                 print(MessagesUtil.CREDENTIALS_PROBLEM_MESSAGE);
@@ -95,6 +93,9 @@ public class BibliotecaApp {
                 else if(menu.get(menuOption).equals(MessagesUtil.RETURN_MOVIE_MENU)){
                     movieReturn();
                 }
+                else if(menu.get(menuOption).equals(MessagesUtil.USER_INFORMATION_MENU)){
+                    printUserInformation();
+                }
             }
             catch (ItemIsNotAvailableException e) {
                 print(e.getMessage());
@@ -134,31 +135,34 @@ public class BibliotecaApp {
         print(bibliotecaManager.checkoutItem(movieCode));
     }
 
+    private void printUserInformation(){
+        User loggedUser = bibliotecaManager.getLoggedUser();
+        if(loggedUser != null){
+            List<User> listUser = new ArrayList<User>();
+            listUser.add(loggedUser);
+            printInformation((List<ItemList>) (List<?>) listUser);
+        }
+    }
+
     private void printAllAvailableBooks(){
         print(MessagesUtil.LIST_ALL_BOOKS_MESSAGE);
-        printAsteristicsFullLine();
-        print("* Code *" + "* Name *" + "* Author *" + "* Year *");
-        printAsteristicsFullLine();
-
         List<Book> availableBooks = bibliotecaManager.getAvailableBooks();
-        for(Book book: availableBooks){
-            if(book.isAvailable()){
-                print("*   " + book.getId() + "   * " + book.getName() + " * " + book.getAuthor() + " * " + book.getYear() + " *");
-            }
-        }
-        printAsteristicsFullLine();
+        printInformation((List<ItemList>) (List<?>) availableBooks);
     }
 
     private void printAllAvailableMovies(){
         print(MessagesUtil.LIST_ALL_MOVIES_MESSAGE);
-        printAsteristicsFullLine();
-        print("* Code *" + "* Name *" + "* Director *" + "* Year *" + "* Rate *");
-        printAsteristicsFullLine();
-
         List<Movie> availableMovies = bibliotecaManager.getAvailableMovies();
-        for(Movie movie: availableMovies){
-            if(movie.isAvailable()){
-                print("*   " + movie.getId() + "   * " + movie.getName() + " * " + movie.getDirector() + " * " + movie.getYear() + " * " + movie.getRate() + " *");
+        printInformation((List<ItemList>)(List<?>)availableMovies);
+    }
+
+    private void printInformation(List<ItemList> itens){
+        printAsteristicsFullLine();
+        if(itens != null && itens.size() > 0){
+            print(itens.get(0).getPropertiesNames());
+            printAsteristicsFullLine();
+            for(ItemList item: itens){
+                print(item.getPropertiesValues());
             }
         }
         printAsteristicsFullLine();
@@ -177,7 +181,7 @@ public class BibliotecaApp {
     }
 
     private void printAsteristicsFullLine(){
-        print("********************************************");
+        print("*******************************************************");
     }
 
     public static void main(String[] args) {

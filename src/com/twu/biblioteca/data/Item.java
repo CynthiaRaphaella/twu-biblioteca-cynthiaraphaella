@@ -1,6 +1,8 @@
 package com.twu.biblioteca.data;
 
-public abstract class Item {
+import java.util.List;
+
+public abstract class Item extends ItemList{
 
     protected int id;
     protected String name;

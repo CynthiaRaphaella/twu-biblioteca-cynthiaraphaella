@@ -2,6 +2,9 @@ package com.twu.biblioteca.data;
 
 import com.twu.biblioteca.util.MessagesUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Movie extends Item{
 
     private String director;
@@ -37,5 +40,13 @@ public class Movie extends Item{
 
     public Class getType(){
         return this.getClass();
+    }
+
+    public String getPropertiesNames(){
+        return SEPARATOR_ITEM + "Code" + SEPARATOR_ITEM + "Name" + SEPARATOR_ITEM + "Director" + SEPARATOR_ITEM + "Year" + SEPARATOR_ITEM + "Rate" + SEPARATOR_ITEM;
+    }
+
+    public String getPropertiesValues(){
+        return SEPARATOR_ITEM + getId() + SEPARATOR_ITEM + getName() + SEPARATOR_ITEM + getDirector() + SEPARATOR_ITEM + getYear() + SEPARATOR_ITEM + getRate() + SEPARATOR_ITEM;
     }
 }

@@ -26,5 +26,6 @@ public class MessagesUtil {
     public static String LIST_MOVIES_MENU = "4. List all movies";
     public static String CHECKOUT_MOVIE_MENU = "5. Get a movie";
     public static String RETURN_MOVIE_MENU = "6. Return a movie";
-    public static String QUIT_OPTION_MENU = "7. Quit";
+    public static String USER_INFORMATION_MENU = "7. User info";
+    public static String QUIT_OPTION_MENU = "8. Quit";
 }
