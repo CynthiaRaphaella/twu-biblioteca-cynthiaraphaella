@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class BibliotecaAppTest {
+public class MenuTest {
 
     @Test(expected=InvalidMenuException.class)
     public void selectInvalidOptionMenu() throws InvalidMenuException {

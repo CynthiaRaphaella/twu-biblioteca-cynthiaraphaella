@@ -3,7 +3,6 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.data.Book;
 import com.twu.biblioteca.data.Item;
 import com.twu.biblioteca.data.Movie;
-import com.twu.biblioteca.data.User;
 import com.twu.biblioteca.expections.InvalidLibraryNumberException;
 import com.twu.biblioteca.expections.ItemIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidItemException;
@@ -36,7 +35,7 @@ public class BibliotecaManagerTest {
     }
 
     @Test
-    public void loadAllPreExistingBooksWhenStart(){
+    public void listAllAvailableBooks(){
         List<Book> preExistingBooks = Seed.getSeedBooks();
         List<Book> bookList = manager.getAvailableBooks();
 
@@ -128,39 +127,6 @@ public class BibliotecaManagerTest {
         manager.returnItem(itemToReturn.getId());
     }
 
-    @Test
-    public void createUserCredentials() throws InvalidLibraryNumberException {
-        String libraryNumber = "123-4567";
-        String password = "admin";
-        User user = new User(libraryNumber, password);
-        manager.getUsers().add(user);
-        assertNotNull(manager.getUser(libraryNumber));
-    }
-
-    @Test(expected = InvalidLibraryNumberException.class)
-    public void createInvalidUser() throws InvalidLibraryNumberException {
-        String libraryNumber = "1235-45678";
-        String password = "admin";
-        new User(libraryNumber, password);
-    }
-
-    @Test
-    public void loginAnExistentUser() throws InvalidLibraryNumberException {
-        User user = getAUser();
-        assertTrue(manager.login(user.getLibraryNumber(), user.getPassword()));
-    }
-
-    @Test
-    public void loginAnUnexistentUser() throws InvalidLibraryNumberException {
-        User user = getAUser();
-        assertFalse(manager.login("000-0000", user.getPassword()));
-    }
-
-    @Test
-    public void loginAnExistentUserWithWrongPassword() throws InvalidLibraryNumberException {
-        assertFalse(manager.login(getAUser().getLibraryNumber(), ""));
-    }
-
     private void assertReturnItem(Item itemToReturn, String expectedReturnMessage) throws ItemIsNotAvailableException, InvalidItemException {
         manager.checkoutItem(itemToReturn.getId());
 
@@ -174,10 +140,6 @@ public class BibliotecaManagerTest {
 
     private Movie getAMovie() {
         return Seed.getSeedMovies().get(0);
-    }
-
-    private User getAUser() throws InvalidLibraryNumberException {
-        return Seed.getSeedUsers().get(0);
     }
 
 }
