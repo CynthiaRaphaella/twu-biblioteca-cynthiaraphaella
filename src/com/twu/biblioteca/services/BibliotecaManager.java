@@ -8,6 +8,7 @@ import com.twu.biblioteca.expections.InvalidLibraryNumberException;
 import com.twu.biblioteca.expections.ItemIsNotAvailableException;
 import com.twu.biblioteca.expections.InvalidItemException;
 import com.twu.biblioteca.util.MessagesUtil;
+import com.twu.biblioteca.util.Seed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,36 +21,14 @@ public class BibliotecaManager {
 
     public String loadBibliotecaApplication(){
         try{
-            seedMenu();
-            seedUsers(getPreExistingUsers());
-            seedPreExistingItens(getPreExistingItens());
+            loadMenu();
+            loadUsers(Seed.getSeedUsers());
+            loadItens(Seed.getSeedItens());
         }
         catch (InvalidLibraryNumberException e){
             return e.getMessage();
         }
-
         return MessagesUtil.WELCOME_MESSAGE;
-    }
-
-    public void seedMenu() {
-        menu = new ArrayList<String>();
-        menu.add(MessagesUtil.LIST_BOOKS_MENU);
-        menu.add(MessagesUtil.CHECKOUT_BOOK_MENU);
-        menu.add(MessagesUtil.RETURN_BOOK_MENU);
-        menu.add(MessagesUtil.LIST_MOVIES_MENU);
-        menu.add(MessagesUtil.CHECKOUT_MOVIE_MENU);
-        menu.add(MessagesUtil.RETURN_MOVIE_MENU);
-        menu.add(MessagesUtil.QUIT_OPTION_MENU);
-    }
-
-    public void seedUsers(List<User> newUsers){
-        users = new ArrayList<User>();
-        users.addAll(newUsers);
-    }
-
-    public void seedPreExistingItens(List<Item> preExistingItens){
-        itens = new ArrayList<Item>();
-        itens.addAll(preExistingItens);
     }
 
     public String checkoutItem(int id) throws ItemIsNotAvailableException {
@@ -114,23 +93,18 @@ public class BibliotecaManager {
         return user != null && user.getPassword().equals(password);
     }
 
-    private List<Item> getPreExistingItens(){
-        List<Item> preExistingItens = new ArrayList<Item>();
-        preExistingItens.add(new Book(1, "Book 1", "Author", "1990"));
-        preExistingItens.add(new Book(2, "Book 2", "Author", "1996"));
-        preExistingItens.add(new Book(3, "Book 3", "Author", "2000"));
-
-        preExistingItens.add(new Movie(4, "Movie 1", "Author", "1990", "1"));
-        preExistingItens.add(new Movie(5, "Movie 2", "Author", "1996", "1"));
-        preExistingItens.add(new Movie(6, "Movie 3", "Author", "2000", "1"));
-        return preExistingItens;
+    public void loadMenu(){
+        menu = new ArrayList<String>();
+        menu = Seed.getSeedMenu();
+    }
+    public void loadUsers(List<User> newUsers){
+        users = new ArrayList<User>();
+        users.addAll(newUsers);
     }
 
-    private List<User> getPreExistingUsers() throws InvalidLibraryNumberException {
-        List<User> users = new ArrayList<User>();
-        users.add(new User("999-8888", "pass"));
-        users.add(new User("222-5678", "1234"));
-        return users;
+    public void loadItens(List<Item> preExistingItens){
+        itens = new ArrayList<Item>();
+        itens.addAll(preExistingItens);
     }
 
 }

@@ -5,6 +5,8 @@ public class MessagesUtil {
 
     public static String WELCOME_MESSAGE = "Welcome to biblioteca system!";
     public static String MENU_WELCOME_MESSAGE = "Choose one of the options bellow. Type the number of the option.";
+    public static String LOGIN_MESSAGE = "Please login with your credentials to access the system.";
+    public static String CREDENTIALS_PROBLEM_MESSAGE = "Login problems. Please try again.";
 
     public static String CHECKOUT_BOOK_MESSAGE = "Thank you! Enjoy the book.";
     public static String CHOOSE_BOOK_CHECKOUT = "**** Choose the book and type its code to checkout. ****";

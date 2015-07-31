@@ -27,25 +27,44 @@ public class BibliotecaApp {
     }
 
     public void startBiblioteca(){
+        console = new Scanner(System.in);
+
         String message = bibliotecaManager.loadBibliotecaApplication();
         print(message);
 
-        console = new Scanner(System.in);
-        int nextOption = 0;
-        int exitOption = bibliotecaManager.getMenu().size();
+        boolean isLogged = false;
+        while (!isLogged){
+            if(login()){
+                isLogged = true;
+                int nextOption = 0;
+                int exitOption = bibliotecaManager.getMenu().size();
 
-        while (nextOption != exitOption){
-            printMenu();
-            try {
-                nextOption = Integer.parseInt(console.next());
-                chooseMenuOption(nextOption);
-            } catch (NumberFormatException e){
-                print(new InvalidMenuException().getMessage());
+                while (nextOption != exitOption){
+                    printMenu();
+                    try {
+                        nextOption = Integer.parseInt(console.next());
+                        chooseMenuOption(nextOption);
+                    } catch (NumberFormatException e){
+                        print(new InvalidMenuException().getMessage());
+                    }
+                    catch (InvalidMenuException e) {
+                        print(e.getMessage());
+                    }
+                }
             }
-            catch (InvalidMenuException e) {
-                print(e.getMessage());
+            else{
+                print(MessagesUtil.CREDENTIALS_PROBLEM_MESSAGE);
             }
         }
+    }
+
+    private boolean login() {
+        print(MessagesUtil.LOGIN_MESSAGE);
+        print("Library Number:");
+        String libraryNumber = console.next();
+        print("Password");
+        String password = console.next();
+        return bibliotecaManager.login(libraryNumber, password);
     }
 
     public void chooseMenuOption(int option) throws InvalidMenuException {
@@ -65,17 +84,16 @@ public class BibliotecaApp {
                     printAllAvailableMovies();
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.CHECKOUT_BOOK_MENU)){
-                    print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
-                    printAllAvailableBooks();
-                    int bookCode = Integer.parseInt(console.next());
-                    print(bibliotecaManager.checkoutItem(bookCode));
-
+                    bookCheckout();
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.RETURN_BOOK_MENU)){
-                    print(MessagesUtil.CHOOSE_BOOK_RETURN);
-                    int bookCode = Integer.parseInt(console.next());
-                    print(bibliotecaManager.returnItem(bookCode));
-
+                    bookReturn();
+                }
+                else if(menu.get(menuOption).equals(MessagesUtil.CHECKOUT_MOVIE_MENU)){
+                    movieCheckout();
+                }
+                else if(menu.get(menuOption).equals(MessagesUtil.RETURN_MOVIE_MENU)){
+                    movieReturn();
                 }
             }
             catch (ItemIsNotAvailableException e) {
@@ -88,6 +106,32 @@ public class BibliotecaApp {
                 throw new InvalidMenuException();
             }
         }
+    }
+
+    private void bookReturn() throws InvalidItemException {
+        print(MessagesUtil.CHOOSE_BOOK_RETURN);
+        int bookCode = Integer.parseInt(console.next());
+        print(bibliotecaManager.returnItem(bookCode));
+    }
+
+    private void movieReturn() throws InvalidItemException {
+        print(MessagesUtil.CHOOSE_MOVIE_RETURN);
+        int movieCode = Integer.parseInt(console.next());
+        print(bibliotecaManager.returnItem(movieCode));
+    }
+
+    private void bookCheckout() throws ItemIsNotAvailableException {
+        print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
+        printAllAvailableBooks();
+        int bookCode = Integer.parseInt(console.next());
+        print(bibliotecaManager.checkoutItem(bookCode));
+    }
+
+    private void movieCheckout() throws ItemIsNotAvailableException {
+        print(MessagesUtil.CHOOSE_MOVIE_CHECKOUT);
+        printAllAvailableMovies();
+        int movieCode = Integer.parseInt(console.next());
+        print(bibliotecaManager.checkoutItem(movieCode));
     }
 
     private void printAllAvailableBooks(){
@@ -135,6 +179,7 @@ public class BibliotecaApp {
     private void printAsteristicsFullLine(){
         print("********************************************");
     }
+
     public static void main(String[] args) {
         BibliotecaApp app = new BibliotecaApp();
         app.startBiblioteca();
