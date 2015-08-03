@@ -76,22 +76,22 @@ public class BibliotecaApp {
             menuOption = option - 1;
             try{
                 if(menu.get(menuOption).equals(MessagesUtil.LIST_BOOKS_MENU)){
-                    printAllAvailableBooks();
+                    printAllAvailableItens(Book.class);
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.LIST_MOVIES_MENU)){
-                    printAllAvailableMovies();
+                    printAllAvailableItens(Movie.class);
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.CHECKOUT_BOOK_MENU)){
-                    bookCheckout();
+                    checkoutItem(MessagesUtil.CHOOSE_BOOK_CHECKOUT, Book.class);
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.RETURN_BOOK_MENU)){
-                    bookReturn();
+                    returnItem(MessagesUtil.CHOOSE_BOOK_RETURN);
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.CHECKOUT_MOVIE_MENU)){
-                    movieCheckout();
+                    checkoutItem(MessagesUtil.CHOOSE_MOVIE_CHECKOUT, Movie.class);
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.RETURN_MOVIE_MENU)){
-                    movieReturn();
+                    returnItem(MessagesUtil.CHOOSE_MOVIE_RETURN);
                 }
                 else if(menu.get(menuOption).equals(MessagesUtil.USER_INFORMATION_MENU)){
                     printUserInformation();
@@ -109,30 +109,17 @@ public class BibliotecaApp {
         }
     }
 
-    private void bookReturn() throws InvalidItemException {
-        print(MessagesUtil.CHOOSE_BOOK_RETURN);
-        int bookCode = Integer.parseInt(console.next());
-        print(bibliotecaManager.returnItem(bookCode));
+    private void returnItem(String message) throws InvalidItemException {
+        print(message);
+        int itemCode = Integer.parseInt(console.next());
+        print(bibliotecaManager.returnItem(itemCode));
     }
 
-    private void movieReturn() throws InvalidItemException {
-        print(MessagesUtil.CHOOSE_MOVIE_RETURN);
-        int movieCode = Integer.parseInt(console.next());
-        print(bibliotecaManager.returnItem(movieCode));
-    }
-
-    private void bookCheckout() throws ItemIsNotAvailableException {
-        print(MessagesUtil.CHOOSE_BOOK_CHECKOUT);
-        printAllAvailableBooks();
-        int bookCode = Integer.parseInt(console.next());
-        print(bibliotecaManager.checkoutItem(bookCode));
-    }
-
-    private void movieCheckout() throws ItemIsNotAvailableException {
-        print(MessagesUtil.CHOOSE_MOVIE_CHECKOUT);
-        printAllAvailableMovies();
-        int movieCode = Integer.parseInt(console.next());
-        print(bibliotecaManager.checkoutItem(movieCode));
+    private void checkoutItem(String checkoutMessage, Class classType) throws ItemIsNotAvailableException {
+        print(checkoutMessage);
+        printAllAvailableItens(classType);
+        int itemCode = Integer.parseInt(console.next());
+        print(bibliotecaManager.checkoutItem(itemCode));
     }
 
     private void printUserInformation(){
@@ -144,16 +131,14 @@ public class BibliotecaApp {
         }
     }
 
-    private void printAllAvailableBooks(){
-        print(MessagesUtil.LIST_ALL_BOOKS_MESSAGE);
-        List<Book> availableBooks = bibliotecaManager.getAvailableBooks();
-        printInformation((List<ItemList>) (List<?>) availableBooks);
-    }
-
-    private void printAllAvailableMovies(){
-        print(MessagesUtil.LIST_ALL_MOVIES_MESSAGE);
-        List<Movie> availableMovies = bibliotecaManager.getAvailableMovies();
-        printInformation((List<ItemList>)(List<?>)availableMovies);
+    private void printAllAvailableItens(Class classType){
+        if(classType.equals(Book.class)){
+            print(MessagesUtil.LIST_ALL_BOOKS_MESSAGE);
+            printInformation((List<ItemList>) (List<?>) bibliotecaManager.getAvailableBooks());
+        } else if(classType.equals(Movie.class)){
+            print(MessagesUtil.LIST_ALL_MOVIES_MESSAGE);
+            printInformation((List<ItemList>) (List<?>) bibliotecaManager.getAvailableMovies());
+        }
     }
 
     private void printInformation(List<ItemList> itens){
@@ -181,7 +166,7 @@ public class BibliotecaApp {
     }
 
     private void printAsteristicsFullLine(){
-        print("*******************************************************");
+        print("***********************************************************");
     }
 
     public static void main(String[] args) {
